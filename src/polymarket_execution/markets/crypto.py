@@ -25,7 +25,7 @@ import json
 import re
 import time
 from dataclasses import dataclass
-from typing import Final
+from typing import Any, Final
 
 import httpx
 
@@ -137,18 +137,19 @@ class CryptoMarketDiscovery:
         """Build the canonical Polymarket slug for ``symbol`` at ``block_timestamp``."""
         return f"{symbol.lower()}-updown-{self.window}-{block_timestamp}"
 
-    def fetch_market_raw(self, slug: str) -> dict | None:
+    def fetch_market_raw(self, slug: str) -> dict[str, Any] | None:
         """Fetch raw market JSON from the Gamma API. Returns ``None`` on 404."""
         url = f"{self.gamma_api_url}/markets/slug/{slug}"
         response = self._client.get(url)
         if response.status_code == 404:
             return None
         response.raise_for_status()
-        return response.json()
+        payload: dict[str, Any] = response.json()
+        return payload
 
     def parse_market(
         self,
-        data: dict,
+        data: dict[str, Any],
         symbol: str,
         block_start: int,
     ) -> CryptoMarket | None:

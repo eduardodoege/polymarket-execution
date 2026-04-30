@@ -11,6 +11,7 @@ import typer
 from polymarket_execution.markets.crypto import (
     BLOCK_DURATIONS_S,
     DEFAULT_SYMBOLS,
+    CryptoMarket,
     discover_current_market,
     discover_current_markets,
 )
@@ -71,7 +72,7 @@ def show_market(condition_id: str = typer.Argument(...)) -> None:
     raise NotImplementedError("v0.5.0: call markets.general.get_market, print details")
 
 
-def _print_market_table(markets: list) -> None:
+def _print_market_table(markets: list[CryptoMarket]) -> None:
     """Render a compact table of CryptoMarket rows."""
     typer.echo(f"{'SYMBOL':<6} {'WIN':<4} {'YES':>5} {'NO':>5} {'REMAIN':>7}  PTB")
     typer.echo("-" * 60)
