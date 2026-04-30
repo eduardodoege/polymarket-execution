@@ -1,0 +1,18 @@
+# Copy to config.yaml and fill in your real values.
+
+polygon_rpc_url: "https://polygon-rpc.com"
+
+# Wallet
+private_key: "0xREPLACE_ME"        # signer EOA private key
+safe_address: "0xREPLACE_ME"       # Polymarket Safe (omit if using EOA-only mode)
+
+# Redeem loop
+redeem_interval_s: 600             # check every 10 minutes
+log_level: "INFO"
+
+# Reserved for future versions of example_bot
+# stop_loss:
+#   enabled: false
+#   token_id: "0x..."
+#   trigger_price: 0.45
+#   size: 100
