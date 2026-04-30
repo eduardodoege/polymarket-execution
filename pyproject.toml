@@ -1,7 +1,7 @@
 [project]
 name = "polymarket-execution"
 version = "0.1.0a0"
-description = "Execution utilities for Polymarket CLOB: stop-loss, take-profit, redeem, position reconciliation, and order lifecycle"
+description = "Execution utilities for Polymarket: stop-loss, redeem, position sync, order lifecycle, and market discovery."
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "Eduardo Doege", email = "eduardodoege87@gmail.com" }]

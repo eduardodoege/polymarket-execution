@@ -1,8 +1,8 @@
 # polymarket-execution
 
-Battle-tested execution utilities for [Polymarket](https://polymarket.com) CLOB v2: stop-loss, take-profit, redeem, position reconciliation, order lifecycle, and recovery layers for masked fills.
+Execution utilities for Polymarket: stop-loss, redeem, position sync, order lifecycle, and market discovery.
 
-Built on top of [`py-clob-client-v2`](https://github.com/Polymarket/py-clob-client-v2). Designed to be the missing layer between the raw CLOB primitives and a production trading bot.
+Built on top of [`py-clob-client-v2`](https://github.com/Polymarket/py-clob-client-v2). Designed to be the missing layer between the raw [Polymarket](https://polymarket.com) CLOB v2 primitives and a production trading bot.
 
 > **Status:** Early development (v0.1.x alpha). API may change before 1.0.
 
