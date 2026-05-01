@@ -230,7 +230,70 @@ def test_discover_current_market_module_fn_uses_context_manager() -> None:
         cls.return_value.__exit__.return_value = None
         result = discover_current_market("btc", window="15m")
     assert result == "fake_market"
-    cls.assert_called_once_with(window="15m", gamma_api_url="https://gamma-api.polymarket.com")
+    cls.assert_called_once_with(
+        window="15m",
+        gamma_api_url="https://gamma-api.polymarket.com",
+        resolve_ptb=True,
+    )
+
+
+# --- resolve_ptb path (ChainLink RTDS fallback) ---
+
+
+PAYLOAD_WITHOUT_PTB_IN_QUESTION = {
+    "slug": "btc-updown-5m-1777596900",
+    "question": "Bitcoin Up or Down - April 30, 8:55PM-9:00PM ET",
+    "conditionId": "0xabc",
+    "outcomePrices": '["0.5", "0.5"]',
+    "clobTokenIds": '["0xY", "0xN"]',
+}
+
+
+def test_parse_market_calls_chainlink_when_question_has_no_ptb_and_resolve_enabled() -> None:
+    discovery = CryptoMarketDiscovery(window="5m", resolve_ptb=True)
+    with patch.object(
+        CryptoMarketDiscovery, "_resolve_ptb_via_chainlink", return_value=76_500.42
+    ) as mocked:
+        market = discovery.parse_market(PAYLOAD_WITHOUT_PTB_IN_QUESTION, "btc", 1_777_596_900)
+    assert market is not None
+    assert market.price_to_beat == 76_500.42
+    mocked.assert_called_once_with("btc", 1_777_596_900)
+    discovery.close()
+
+
+def test_parse_market_skips_chainlink_when_resolve_disabled() -> None:
+    discovery = CryptoMarketDiscovery(window="5m", resolve_ptb=False)
+    with patch.object(CryptoMarketDiscovery, "_resolve_ptb_via_chainlink") as mocked:
+        market = discovery.parse_market(PAYLOAD_WITHOUT_PTB_IN_QUESTION, "btc", 1_777_596_900)
+    assert market is not None
+    assert market.price_to_beat is None
+    mocked.assert_not_called()
+    discovery.close()
+
+
+def test_parse_market_skips_chainlink_when_question_already_has_ptb() -> None:
+    """If the question carries the $ value, the regex parser wins — no WS call."""
+    discovery = CryptoMarketDiscovery(window="5m", resolve_ptb=True)
+    with patch.object(CryptoMarketDiscovery, "_resolve_ptb_via_chainlink") as mocked:
+        market = discovery.parse_market(SAMPLE_GAMMA_RESPONSE, "btc", 1_777_475_100)
+    assert market is not None
+    assert market.price_to_beat == 76_500.0  # from question
+    mocked.assert_not_called()
+    discovery.close()
+
+
+def test_resolve_ptb_returns_none_when_called_from_event_loop() -> None:
+    """In an async context the helper bails out (with a warning) instead of asyncio.run."""
+    import asyncio
+
+    async def _inside_loop() -> float | None:
+        discovery = CryptoMarketDiscovery(window="5m", resolve_ptb=True)
+        try:
+            return discovery._resolve_ptb_via_chainlink("btc", 1_000_000)
+        finally:
+            discovery.close()
+
+    assert asyncio.run(_inside_loop()) is None
 
 
 # --- safety: SAMPLE_GAMMA_RESPONSE matches what the real Gamma API returns ---
