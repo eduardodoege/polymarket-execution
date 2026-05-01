@@ -107,11 +107,11 @@ polymarket-execution redeem auto                          # redeem all resolved 
 polymarket-execution markets crypto --window 5m           # current crypto markets
 polymarket-execution markets crypto --symbol btc          # single symbol
 polymarket-execution markets crypto --window 5m --no-ptb  # skip ChainLink PTB lookup (faster)
-polymarket-execution markets list                         # general listing
-polymarket-execution stop-loss watch                      # interactive stop-loss monitor
-polymarket-execution take-profit watch                    # interactive take-profit monitor
-polymarket-execution position reconcile                   # CLOB vs chain drift report
 ```
+
+New CLI commands ship together with the feature they expose — we don't
+register placeholders. Stop-loss, take-profit, orders, and position
+sub-commands will land here when their library counterparts do.
 
 Run `polymarket-execution --help` for the full command tree.
 

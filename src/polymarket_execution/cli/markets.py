@@ -1,4 +1,9 @@
-"""CLI: list and inspect Polymarket markets."""
+"""CLI: discover Polymarket markets.
+
+Currently exposes only `crypto` (slug-based crypto up/down market
+lookup). General listing/search via `polymarket-apis` is planned for
+v0.5 and will land here together with its implementation.
+"""
 
 from __future__ import annotations
 
@@ -61,21 +66,6 @@ def crypto(
         typer.echo(f"No markets listed yet for window {window} (symbols tried: {DEFAULT_SYMBOLS})")
         raise typer.Exit(code=1)
     _print_market_table(markets)
-
-
-@app.command("list")
-def list_markets(
-    active: bool = typer.Option(True, help="Filter to currently active markets."),
-    limit: int = typer.Option(50),
-) -> None:
-    """List markets across categories."""
-    raise NotImplementedError("v0.5.0: call markets.general.list_markets, print table")
-
-
-@app.command("show")
-def show_market(condition_id: str = typer.Argument(...)) -> None:
-    """Show full metadata for one market by condition_id."""
-    raise NotImplementedError("v0.5.0: call markets.general.get_market, print details")
 
 
 def _print_market_table(markets: list[CryptoMarket]) -> None:

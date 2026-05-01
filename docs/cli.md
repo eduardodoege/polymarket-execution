@@ -7,17 +7,17 @@ without writing a script.
 polymarket-execution --help
 ```
 
-## Command groups
+## Command groups (current)
 
 | Group | Purpose |
 |-------|---------|
 | `redeem` | Discover, redeem, wrap (USDC.e -> pUSD) |
 | `markets crypto` | Discover crypto up/down markets (native, slug-based) |
-| `markets list` / `markets show` | General listing/search via polymarket-apis |
-| `stop-loss` | Run a stop-loss monitor in the foreground |
-| `take-profit` | Run a take-profit monitor in the foreground |
-| `orders` | Place orders, fetch true VWAP fill price |
-| `position` | Reconcile CLOB and on-chain positions |
+
+New sub-commands (`stop-loss`, `take-profit`, `orders`, `position`,
+`markets list`/`show`) ship together with the library feature they
+expose — we don't register placeholders that would raise
+`NotImplementedError` at runtime.
 
 ## Environment variables
 
@@ -26,9 +26,8 @@ pass credentials on every command:
 
 | Variable | Used by |
 |----------|---------|
-| `POLYGON_RPC_URL` | `redeem`, `position` |
-| `POLYMARKET_PRIVATE_KEY` | order-placing commands (when wired up) |
-| `POLYMARKET_SAFE` | `redeem`, `position` (Safe wallet mode) |
+| `POLYGON_RPC_URL` | `redeem` |
+| `POLYMARKET_PRIVATE_KEY` | `redeem` (and order-placing commands when they land) |
 
 ## Implementation note
 
