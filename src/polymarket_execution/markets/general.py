@@ -1,15 +1,12 @@
 """General market discovery — listing, search, category filtering.
 
 For arbitrary Polymarket markets (politics, sports, entertainment, etc.).
-Delegates to ``polymarket-apis`` for paginated listing and filtering.
-
-Requires the ``[markets]`` extra::
-
-    pip install polymarket-execution[markets]
+Delegates to ``polymarket-apis`` (a core dependency since v0.2) for
+paginated listing and filtering.
 
 For deterministic crypto up/down market lookup (BTC/ETH/SOL/XRP at
 5m/15m/1h windows), use ``polymarket_execution.markets.crypto`` instead —
-it does not need this extra and uses one HTTP call per lookup.
+it uses a single HTTP call per lookup against the Gamma API.
 """
 
 from __future__ import annotations
@@ -38,8 +35,8 @@ def list_markets(
 ) -> list[MarketSummary]:
     """List markets matching the filters. Delegates to ``polymarket-apis``."""
     raise NotImplementedError(
-        "v0.5.0: import polymarket_apis (optional [markets] extra), "
-        "call its market listing endpoint, map results to MarketSummary"
+        "v0.5.0: import polymarket_apis, call its market listing endpoint, "
+        "map results to MarketSummary"
     )
 
 

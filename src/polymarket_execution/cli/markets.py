@@ -1,8 +1,4 @@
-"""CLI: list and inspect Polymarket markets.
-
-The ``crypto`` subcommand is native (no extra required). The ``list`` and
-``show`` subcommands require ``pip install polymarket-execution[markets]``.
-"""
+"""CLI: list and inspect Polymarket markets."""
 
 from __future__ import annotations
 
@@ -42,7 +38,7 @@ def crypto(
         ),
     ),
 ) -> None:
-    """Discover the current block's crypto up/down markets (no extra dependency)."""
+    """Discover the current block's crypto up/down markets."""
     if window not in BLOCK_DURATIONS_S:
         raise typer.BadParameter(
             f"Unsupported window {window!r}; pick one of {sorted(BLOCK_DURATIONS_S)}"
@@ -72,13 +68,13 @@ def list_markets(
     active: bool = typer.Option(True, help="Filter to currently active markets."),
     limit: int = typer.Option(50),
 ) -> None:
-    """List markets across categories (requires the ``[markets]`` extra)."""
+    """List markets across categories."""
     raise NotImplementedError("v0.5.0: call markets.general.list_markets, print table")
 
 
 @app.command("show")
 def show_market(condition_id: str = typer.Argument(...)) -> None:
-    """Show full metadata for one market by condition_id (requires ``[markets]`` extra)."""
+    """Show full metadata for one market by condition_id."""
     raise NotImplementedError("v0.5.0: call markets.general.get_market, print details")
 
 

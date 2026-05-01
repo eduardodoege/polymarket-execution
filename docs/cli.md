@@ -12,8 +12,8 @@ polymarket-execution --help
 | Group | Purpose |
 |-------|---------|
 | `redeem` | Discover, redeem, wrap (USDC.e -> pUSD) |
-| `markets crypto` | Discover crypto up/down markets — native, no extra needed |
-| `markets list` / `markets show` | General listing/search (requires `[markets]` extra) |
+| `markets crypto` | Discover crypto up/down markets (native, slug-based) |
+| `markets list` / `markets show` | General listing/search via polymarket-apis |
 | `stop-loss` | Run a stop-loss monitor in the foreground |
 | `take-profit` | Run a take-profit monitor in the foreground |
 | `orders` | Place orders, fetch true VWAP fill price |

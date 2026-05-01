@@ -31,20 +31,15 @@ source .venv/Scripts/activate    # Git Bash on Windows
 pip install polymarket-execution
 ```
 
-Optional extras:
+Development extras (only needed if you're contributing):
 
 ```bash
-pip install polymarket-execution[markets]   # category-filtered market listing/search
 pip install polymarket-execution[dev]       # pytest, ruff, mypy
 ```
 
-> Crypto up/down market discovery (BTC/ETH/SOL/XRP at 5m/15m/1h windows)
-> works out of the box — the `[markets]` extra is only needed for general
-> listing/search across categories.
-
 ## Quick start: discover current crypto markets
 
-> Available now. Native slug-based lookup, no `[markets]` extra needed.
+> Available now. Native slug-based lookup.
 
 ```python
 from polymarket_execution.markets import discover_current_markets
@@ -100,8 +95,8 @@ await monitor.run()
 | `orders.fills` | Get true VWAP fill price via `get_trades` (fixes a critical PnL bug) |
 | `recovery` | 5 recovery layers for masked fills (network/status/balance/matched_orders/suspect_drop) |
 | `position` | Reconcile CLOB and on-chain positions |
-| `markets.crypto` | Native slug-based discovery for crypto up/down markets (no extra) |
-| `markets.general` | List/search arbitrary markets (requires `[markets]` extra) |
+| `markets.crypto` | Native slug-based discovery for crypto up/down markets |
+| `markets.general` | List/search arbitrary markets via polymarket-apis |
 | `order_lifecycle` | Retry, replace, and clean up stale orders |
 | `price_feed.chainlink_rtds` | Polymarket-aligned ChainLink price feed via WebSocket (one-shot snapshot lookup available now; streaming lands with `triggers` in v0.3) |
 
@@ -109,10 +104,10 @@ await monitor.run()
 
 ```bash
 polymarket-execution redeem auto                          # redeem all resolved positions
-polymarket-execution markets crypto --window 5m           # current crypto markets (no extra)
+polymarket-execution markets crypto --window 5m           # current crypto markets
 polymarket-execution markets crypto --symbol btc          # single symbol
 polymarket-execution markets crypto --window 5m --no-ptb  # skip ChainLink PTB lookup (faster)
-polymarket-execution markets list                         # general listing (requires [markets])
+polymarket-execution markets list                         # general listing
 polymarket-execution stop-loss watch                      # interactive stop-loss monitor
 polymarket-execution take-profit watch                    # interactive take-profit monitor
 polymarket-execution position reconcile                   # CLOB vs chain drift report
@@ -130,7 +125,7 @@ cd polymarket-execution
 
 python -m venv .venv
 source .venv/Scripts/activate    # see install section for other shells
-pip install -e ".[dev,markets]"  # editable + dev tooling + optional extras
+pip install -e ".[dev]"          # editable + dev tooling
 
 # The same checks CI runs
 ruff check .

@@ -38,7 +38,7 @@ polymarket_execution/
 ├── recovery.py           5 recovery layers for masked fills
 ├── markets/              Market discovery
 │   ├── crypto.py         Native slug-based crypto up/down lookup (no extra)
-│   └── general.py        Listing/search via polymarket-apis ([markets] extra)
+│   └── general.py        Listing/search via polymarket-apis
 ├── position.py           CLOB ↔ chain reconciliation
 ├── order_lifecycle.py    Retry, replace, stale detection
 └── cli/                  Typer CLI mirroring the library surface

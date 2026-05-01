@@ -4,13 +4,12 @@ Two modules:
 
 - ``crypto`` — native discovery for Polymarket crypto up/down markets
   (BTC/ETH/SOL/XRP at 5m/15m/1h windows). Uses slug-based lookup against
-  the Gamma API; **no SDK dependency**.
+  the Gamma API; one HTTP call per lookup.
 - ``general`` — paginated listing, search, and category filtering for
-  arbitrary markets (politics, sports, etc.). Requires the ``[markets]``
-  extra: ``pip install polymarket-execution[markets]``.
+  arbitrary markets (politics, sports, etc.). Delegates to
+  ``polymarket-apis``.
 
-For deterministic crypto lookup, prefer ``crypto`` — it is faster and
-doesn't need the extra.
+For deterministic crypto lookup, prefer ``crypto`` — it is faster.
 """
 
 from polymarket_execution.markets.crypto import (

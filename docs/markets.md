@@ -2,12 +2,12 @@
 
 Two modules cover different needs:
 
-- **`markets.crypto`** — native discovery for Polymarket crypto up/down markets (BTC/ETH/SOL/XRP at 5m/15m/1h windows). One HTTP call per lookup against the Gamma API; no SDK dependency.
-- **`markets.general`** — paginated listing, search, and category filtering for arbitrary markets (politics, sports, etc.). Requires the `[markets]` extra.
+- **`markets.crypto`** — native discovery for Polymarket crypto up/down markets (BTC/ETH/SOL/XRP at 5m/15m/1h windows). One HTTP call per lookup against the Gamma API.
+- **`markets.general`** — paginated listing, search, and category filtering for arbitrary markets (politics, sports, etc.). Delegates to `polymarket-apis` (a core dependency since v0.2).
 
 For deterministic crypto lookup, use `crypto`. For everything else, use `general`.
 
-## Crypto markets (no extra needed)
+## Crypto markets
 
 Polymarket runs a continuous series of binary up/down markets at fixed time windows. Each market is identified by a deterministic slug:
 
@@ -66,13 +66,9 @@ with CryptoMarketDiscovery(window="5m") as discovery:
 
 Default symbols: `btc`, `eth`, `sol`, `xrp`. Pass any list to `discover_markets(symbols=[...])` to override.
 
-## General markets (`[markets]` extra)
+## General markets
 
 For listing, search, and filtering across all market categories:
-
-```bash
-pip install polymarket-execution[markets]
-```
 
 ```python
 from polymarket_execution.markets.general import list_markets
@@ -87,6 +83,6 @@ Status: skeleton in v0.1, full implementation in v0.5.0.
 ```bash
 polymarket-execution markets crypto                          # all default symbols at 5m
 polymarket-execution markets crypto --symbol btc --window 15m  # single symbol, 15m
-polymarket-execution markets list                            # general listing (requires extra)
-polymarket-execution markets show <condition_id>             # market details (requires extra)
+polymarket-execution markets list                            # general listing
+polymarket-execution markets show <condition_id>             # market details
 ```

@@ -66,7 +66,7 @@ gh pr merge --squash --auto
 ```bash
 git clone https://github.com/eduardodoege/polymarket-execution.git
 cd polymarket-execution
-pip install -e ".[dev,markets]"
+pip install -e ".[dev]"
 
 # Run the same checks CI runs
 ruff check .
