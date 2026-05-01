@@ -20,7 +20,7 @@ This library provides those primitives, with no opinions about your trading stra
 
 ## Install
 
-Requires Python 3.10+. We strongly recommend installing inside a virtual environment to keep dependencies isolated from your system Python:
+Requires Python 3.12+. We strongly recommend installing inside a virtual environment to keep dependencies isolated from your system Python:
 
 ```bash
 python -m venv .venv
@@ -34,7 +34,7 @@ pip install polymarket-execution
 Optional extras:
 
 ```bash
-pip install polymarket-execution[markets]   # category-filtered market listing/search (requires Python 3.12+)
+pip install polymarket-execution[markets]   # category-filtered market listing/search
 pip install polymarket-execution[dev]       # pytest, ruff, mypy
 ```
 

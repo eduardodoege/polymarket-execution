@@ -5,7 +5,7 @@ description = "Execution utilities for Polymarket: stop-loss, redeem, position s
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "Eduardo Doege", email = "eduardodoege87@gmail.com" }]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 keywords = [
     "polymarket",
     "trading",
@@ -22,16 +22,12 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Office/Business :: Financial",
     "Typing :: Typed",
 ]
 dependencies = [
     "py-clob-client-v2>=1.0.0",
-    # 0.4.x is the last line that supports Python 3.10/3.11; pip will pick
-    # 0.5+ automatically on Python 3.12+ via the marker in the [markets] extra.
     "polymarket-apis>=0.4.6",
     "web3>=7.0.0",
     "typer>=0.12.0",
@@ -40,9 +36,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# Newer polymarket-apis (0.5+) adds Gamma/listing helpers used by
-# polymarket_execution.markets.general but requires Python >=3.12.
-markets = ["polymarket-apis>=0.5.0; python_version >= '3.12'"]
+# Adds Gamma/listing helpers used by polymarket_execution.markets.general.
+markets = ["polymarket-apis>=0.5.0"]
 dev = [
     "pytest>=8.0",
     "pytest-asyncio>=0.23",
@@ -69,7 +64,7 @@ packages = ["src/polymarket_execution"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "N", "SIM"]
@@ -83,7 +78,7 @@ testpaths = ["tests"]
 pythonpath = ["src"]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.12"
 strict = true
 warn_unreachable = true
 disallow_untyped_decorators = true
