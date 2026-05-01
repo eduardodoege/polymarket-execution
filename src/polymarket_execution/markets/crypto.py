@@ -16,7 +16,7 @@ no need to list all markets and filter, no SDK dependency, no pagination.
 
 Use this when you know what symbol and window you want. For category
 search, free-text search, or non-crypto markets, use
-``polymarket_execution.markets.general`` (requires the ``[markets]`` extra).
+``polymarket_execution.markets.general``.
 """
 
 from __future__ import annotations

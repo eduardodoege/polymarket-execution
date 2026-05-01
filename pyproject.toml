@@ -28,7 +28,7 @@ classifiers = [
 ]
 dependencies = [
     "py-clob-client-v2>=1.0.0",
-    "polymarket-apis>=0.4.6",
+    "polymarket-apis>=0.5.0",
     "web3>=7.0.0",
     "typer>=0.12.0",
     "websockets>=14.0",
@@ -36,8 +36,6 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# Adds Gamma/listing helpers used by polymarket_execution.markets.general.
-markets = ["polymarket-apis>=0.5.0"]
 dev = [
     "pytest>=8.0",
     "pytest-asyncio>=0.23",

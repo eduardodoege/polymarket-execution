@@ -39,6 +39,6 @@ jobs:
       - name: Install
         run: |
           python -m pip install --upgrade pip
-          pip install -e ".[dev,markets]"
+          pip install -e ".[dev]"
       - name: Pytest
         run: pytest --cov=polymarket_execution --cov-report=term-missing
