@@ -30,6 +30,9 @@ classifiers = [
 ]
 dependencies = [
     "py-clob-client-v2>=1.0.0",
+    # 0.4.x is the last line that supports Python 3.10/3.11; pip will pick
+    # 0.5+ automatically on Python 3.12+ via the marker in the [markets] extra.
+    "polymarket-apis>=0.4.6",
     "web3>=7.0.0",
     "typer>=0.12.0",
     "websockets>=14.0",
@@ -37,9 +40,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# polymarket-apis requires Python >=3.12; install becomes a no-op on 3.10/3.11
-# (the markets.general module raises NotImplementedError on those versions until
-# polymarket-apis ships a 3.10/3.11-compatible release).
+# Newer polymarket-apis (0.5+) adds Gamma/listing helpers used by
+# polymarket_execution.markets.general but requires Python >=3.12.
 markets = ["polymarket-apis>=0.5.0; python_version >= '3.12'"]
 dev = [
     "pytest>=8.0",
@@ -85,3 +87,8 @@ python_version = "3.10"
 strict = true
 warn_unreachable = true
 disallow_untyped_decorators = true
+
+# polymarket-apis ships without type stubs; treat as Any for now.
+[[tool.mypy.overrides]]
+module = "polymarket_apis"
+ignore_missing_imports = true

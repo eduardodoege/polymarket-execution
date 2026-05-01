@@ -33,3 +33,17 @@ WRAP_GAS_ESTIMATE: Final[int] = 131_232
 # ChainLink RTDS WebSocket endpoint
 CHAINLINK_RTDS_WS_URL: Final[str] = "wss://ws-live-data.polymarket.com"
 CHAINLINK_RTDS_TOPIC: Final[str] = "crypto_prices_chainlink"
+
+# Polymarket Data API base URL (positions, trades, etc.)
+POLYMARKET_DATA_API_URL: Final[str] = "https://data-api.polymarket.com"
+
+# Public Polygon RPC endpoints, ordered by reliability (used as fallback chain
+# by RedeemClient when the primary RPC fails).
+DEFAULT_POLYGON_RPC_URLS: Final[tuple[str, ...]] = (
+    "https://polygon-bor-rpc.publicnode.com",
+    "https://rpc.ankr.com/polygon",
+    "https://1rpc.io/matic",
+    "https://polygon.drpc.org",
+    "https://polygon-public.nodies.app/",
+    "https://polygon.api.onfinality.io/public",
+)

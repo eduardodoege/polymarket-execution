@@ -2,17 +2,31 @@
 
 Three modules:
 
-- ``core`` — the actual ``redeemPositions`` web3 call(s)
+- ``core`` — discover redeemable positions, call ``redeemPositions`` on chain
 - ``wrap`` — convert USDC.e to pUSD after redeem (CLOB v2 requirement)
-- ``safe`` — Gnosis Safe wallet support (signature_type=2 / POLY_GNOSIS_SAFE)
+- ``safe`` — Gnosis Safe wallet helpers (Safe routing itself is built into
+  the underlying ``polymarket-apis`` client when ``signature_type=2``)
 
-The default entrypoint ``RedeemClient`` composes all three: it discovers
+The default entry point ``RedeemClient`` composes all three: it discovers
 resolved positions, redeems them, and wraps any USDC.e proceeds to pUSD
 in a single sweep.
 """
 
-from polymarket_execution.redeem.core import RedeemClient, RedeemResult
+from polymarket_execution.redeem.core import (
+    RedeemablePosition,
+    RedeemClient,
+    RedeemReceipt,
+    RedeemResult,
+)
 from polymarket_execution.redeem.safe import SafeRedeemAdapter
-from polymarket_execution.redeem.wrap import wrap_usdce_to_pusd
+from polymarket_execution.redeem.wrap import WrapReceipt, wrap_usdce_to_pusd
 
-__all__ = ["RedeemClient", "RedeemResult", "SafeRedeemAdapter", "wrap_usdce_to_pusd"]
+__all__ = [
+    "RedeemablePosition",
+    "RedeemClient",
+    "RedeemReceipt",
+    "RedeemResult",
+    "SafeRedeemAdapter",
+    "WrapReceipt",
+    "wrap_usdce_to_pusd",
+]
