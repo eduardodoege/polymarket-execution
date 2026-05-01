@@ -20,14 +20,21 @@ This library provides those primitives, with no opinions about your trading stra
 
 ## Install
 
+Requires Python 3.10+. We strongly recommend installing inside a virtual environment to keep dependencies isolated from your system Python:
+
 ```bash
+python -m venv .venv
+source .venv/Scripts/activate    # Git Bash on Windows
+# .venv\Scripts\Activate.ps1     # PowerShell
+# source .venv/bin/activate      # macOS / Linux
+
 pip install polymarket-execution
 ```
 
 Optional extras:
 
 ```bash
-pip install polymarket-execution[markets]   # adds polymarket-apis for category-filtered listing/search
+pip install polymarket-execution[markets]   # category-filtered market listing/search (requires Python 3.12+)
 pip install polymarket-execution[dev]       # pytest, ruff, mypy
 ```
 
@@ -49,16 +56,18 @@ for m in markets:
 
 ## Quick start: redeem resolved positions
 
-> Preview API. Implementation lands in v0.1.0; the snippet below shows the target shape.
+> Available now (v0.1).
 
 ```python
-from py_clob_client_v2 import ClobClient
 from polymarket_execution.redeem import RedeemClient
 
-client = ClobClient(host="https://clob.polymarket.com", chain_id=137, key=PRIVATE_KEY, signature_type=2, funder=SAFE_ADDRESS)
+with RedeemClient(
+    private_key=PRIVATE_KEY,        # EOA hex private key
+    rpc_url=POLYGON_RPC_URL,        # optional; falls back to public Polygon RPCs
+    signature_type=2,               # 2 = Gnosis Safe (Polymarket default); 0 = EOA-only
+) as redeemer:
+    result = redeemer.auto_redeem_all()  # also wraps USDC.e -> pUSD afterwards
 
-redeemer = RedeemClient(clob_client=client, web3_rpc_url=POLYGON_RPC, safe_address=SAFE_ADDRESS)
-result = redeemer.auto_redeem_all()  # also wraps USDC.e -> pUSD afterwards
 print(result.redeemed_markets, result.wrap_tx_hash)
 ```
 
@@ -104,6 +113,27 @@ polymarket-execution position reconcile                   # CLOB vs chain drift 
 ```
 
 Run `polymarket-execution --help` for the full command tree.
+
+## Development
+
+Working on the library itself? Clone and install editable inside a venv:
+
+```bash
+git clone https://github.com/eduardodoege/polymarket-execution.git
+cd polymarket-execution
+
+python -m venv .venv
+source .venv/Scripts/activate    # see install section for other shells
+pip install -e ".[dev,markets]"  # editable + dev tooling + optional extras
+
+# The same checks CI runs
+ruff check .
+ruff format --check .
+mypy src/
+pytest
+```
+
+`pyproject.toml` sets `pythonpath = ["src"]` for pytest so tests work without an editable install, but `pip install -e .` is needed for `mypy` and the CLI entry point. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the PR workflow.
 
 ## What this is NOT
 
