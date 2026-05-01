@@ -51,8 +51,13 @@ from polymarket_execution.markets import discover_current_markets
 
 markets = discover_current_markets(window="5m")  # btc, eth, sol, xrp by default
 for m in markets:
-    print(m, "->", m.polymarket_url)
+    print(m, "->", m.polymarket_url, "PTB:", m.price_to_beat)
 ```
+
+The strike price (`price_to_beat`) is resolved against Polymarket's
+ChainLink RTDS feed at `block_start` — i.e., the same value the oracle
+will use to settle the market. Pass `resolve_ptb=False` to skip the
+WebSocket lookup if you don't need the strike (faster, no extra socket).
 
 ## Quick start: redeem resolved positions
 
@@ -98,7 +103,7 @@ await monitor.run()
 | `markets.crypto` | Native slug-based discovery for crypto up/down markets (no extra) |
 | `markets.general` | List/search arbitrary markets (requires `[markets]` extra) |
 | `order_lifecycle` | Retry, replace, and clean up stale orders |
-| `price_feed.chainlink_rtds` | Polymarket-aligned ChainLink price feed via WebSocket |
+| `price_feed.chainlink_rtds` | Polymarket-aligned ChainLink price feed via WebSocket (one-shot snapshot lookup available now; streaming lands with `triggers` in v0.3) |
 
 ## CLI
 
@@ -106,6 +111,7 @@ await monitor.run()
 polymarket-execution redeem auto                          # redeem all resolved positions
 polymarket-execution markets crypto --window 5m           # current crypto markets (no extra)
 polymarket-execution markets crypto --symbol btc          # single symbol
+polymarket-execution markets crypto --window 5m --no-ptb  # skip ChainLink PTB lookup (faster)
 polymarket-execution markets list                         # general listing (requires [markets])
 polymarket-execution stop-loss watch                      # interactive stop-loss monitor
 polymarket-execution take-profit watch                    # interactive take-profit monitor

@@ -33,6 +33,14 @@ def crypto(
         "-w",
         help=f"Time window. One of: {sorted(BLOCK_DURATIONS_S)}.",
     ),
+    no_ptb: bool = typer.Option(
+        False,
+        "--no-ptb",
+        help=(
+            "Skip the ChainLink RTDS lookup that resolves the strike price (PTB). "
+            "Faster (no WebSocket), but the PTB column will be empty."
+        ),
+    ),
 ) -> None:
     """Discover the current block's crypto up/down markets (no extra dependency)."""
     if window not in BLOCK_DURATIONS_S:
@@ -40,8 +48,10 @@ def crypto(
             f"Unsupported window {window!r}; pick one of {sorted(BLOCK_DURATIONS_S)}"
         )
 
+    resolve_ptb = not no_ptb
+
     if symbol is not None:
-        market = discover_current_market(symbol, window=window)
+        market = discover_current_market(symbol, window=window, resolve_ptb=resolve_ptb)
         if market is None:
             typer.echo(
                 f"No market found for {symbol.upper()} {window} (current block not yet listed)"
@@ -50,7 +60,7 @@ def crypto(
         _print_market_table([market])
         return
 
-    markets = discover_current_markets(window=window)
+    markets = discover_current_markets(window=window, resolve_ptb=resolve_ptb)
     if not markets:
         typer.echo(f"No markets listed yet for window {window} (symbols tried: {DEFAULT_SYMBOLS})")
         raise typer.Exit(code=1)

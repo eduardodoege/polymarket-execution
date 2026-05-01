@@ -21,13 +21,17 @@ search, free-text search, or non-crypto markets, use
 
 from __future__ import annotations
 
+import asyncio
 import json
+import logging
 import re
 import time
 from dataclasses import dataclass
 from typing import Any, Final
 
 import httpx
+
+logger = logging.getLogger(__name__)
 
 BLOCK_DURATIONS_S: Final[dict[str, int]] = {
     "5m": 300,
@@ -115,6 +119,7 @@ class CryptoMarketDiscovery:
         window: str = "5m",
         gamma_api_url: str = DEFAULT_GAMMA_API_URL,
         timeout_s: float = 10.0,
+        resolve_ptb: bool = True,
     ) -> None:
         if window not in BLOCK_DURATIONS_S:
             supported = sorted(BLOCK_DURATIONS_S)
@@ -122,6 +127,7 @@ class CryptoMarketDiscovery:
         self.window = window
         self.duration_s = BLOCK_DURATIONS_S[window]
         self.gamma_api_url = gamma_api_url.rstrip("/")
+        self.resolve_ptb = resolve_ptb
         self._client = httpx.Client(timeout=timeout_s)
 
     def current_block_timestamp(self) -> int:
@@ -172,6 +178,9 @@ class CryptoMarketDiscovery:
             no_token_id = token_ids[1] if len(token_ids) > 1 else ""
 
             question = data.get("question", "")
+            ptb = CryptoMarket.parse_price_to_beat(question)
+            if ptb is None and self.resolve_ptb:
+                ptb = self._resolve_ptb_via_chainlink(symbol, block_start)
             return CryptoMarket(
                 symbol=symbol.lower(),
                 window=self.window,
@@ -184,9 +193,41 @@ class CryptoMarketDiscovery:
                 question=question,
                 yes_token_id=yes_token_id,
                 no_token_id=no_token_id,
-                price_to_beat=CryptoMarket.parse_price_to_beat(question),
+                price_to_beat=ptb,
             )
         except (KeyError, ValueError, IndexError, json.JSONDecodeError):
+            return None
+
+    def _resolve_ptb_via_chainlink(self, symbol: str, block_start: int) -> float | None:
+        """Look up the strike price from the ChainLink RTDS feed.
+
+        Polymarket's recent crypto questions no longer embed the strike as
+        ``$X,XXX.XX`` text, so the regex parser comes back empty. The strike
+        is the ChainLink value at ``block_start`` — the same value the oracle
+        will use to resolve the market — so we fetch that directly.
+
+        Returns ``None`` if the lookup is called from inside an event loop
+        (use ``adiscover_current_market`` from async code instead) or if the
+        WebSocket call fails / times out.
+        """
+        try:
+            asyncio.get_running_loop()
+        except RuntimeError:
+            pass  # No loop running, safe to use asyncio.run
+        else:
+            logger.warning(
+                "resolve_ptb=True called from a running event loop; PTB will be None. "
+                "Use ChainLinkRTDSFeed.fetch_price_at_time(...) directly from async code."
+            )
+            return None
+
+        # Lazy import to avoid pulling websockets into callers that disable PTB.
+        from polymarket_execution.price_feed.chainlink_rtds import ChainLinkRTDSFeed
+
+        try:
+            return asyncio.run(ChainLinkRTDSFeed.fetch_price_at_time(symbol, float(block_start)))
+        except Exception as exc:
+            logger.warning("ChainLink RTDS lookup failed for %s: %s", symbol, exc)
             return None
 
     def discover_market(self, symbol: str) -> CryptoMarket | None:
@@ -234,9 +275,12 @@ def discover_current_market(
     symbol: str,
     window: str = "5m",
     gamma_api_url: str = DEFAULT_GAMMA_API_URL,
+    resolve_ptb: bool = True,
 ) -> CryptoMarket | None:
     """One-shot: discover the current block's market for ``symbol`` at ``window``."""
-    with CryptoMarketDiscovery(window=window, gamma_api_url=gamma_api_url) as discovery:
+    with CryptoMarketDiscovery(
+        window=window, gamma_api_url=gamma_api_url, resolve_ptb=resolve_ptb
+    ) as discovery:
         return discovery.discover_market(symbol)
 
 
@@ -244,7 +288,10 @@ def discover_current_markets(
     symbols: tuple[str, ...] | list[str] | None = None,
     window: str = "5m",
     gamma_api_url: str = DEFAULT_GAMMA_API_URL,
+    resolve_ptb: bool = True,
 ) -> list[CryptoMarket]:
     """One-shot: discover the current block's markets for multiple symbols at ``window``."""
-    with CryptoMarketDiscovery(window=window, gamma_api_url=gamma_api_url) as discovery:
+    with CryptoMarketDiscovery(
+        window=window, gamma_api_url=gamma_api_url, resolve_ptb=resolve_ptb
+    ) as discovery:
         return discovery.discover_markets(symbols)
