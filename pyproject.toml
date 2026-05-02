@@ -85,3 +85,9 @@ disallow_untyped_decorators = true
 [[tool.mypy.overrides]]
 module = "polymarket_apis"
 ignore_missing_imports = true
+
+# PyYAML stubs are a separate package (types-PyYAML); not worth pulling in
+# just so example_bot/bot.py type-checks cleanly.
+[[tool.mypy.overrides]]
+module = "yaml"
+ignore_missing_imports = true

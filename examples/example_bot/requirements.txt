@@ -1,2 +1,8 @@
-polymarket-execution>=0.1.0
+# When you clone the repo and run `pip install -e .` from the root, the
+# library is already importable; this file exists for users who copy
+# example_bot/ out of the repo and want to run it standalone against the
+# published package.
+
+polymarket-execution
 pyyaml>=6.0
+python-dotenv>=1.0

@@ -1,18 +1,31 @@
-# Copy to config.yaml and fill in your real values.
+# example_bot — crypto demo configuration.
+# Copy to config.yaml and tweak. Never commit a config.yaml that contains
+# secrets — POLYMARKET_PRIVATE_KEY is read from your environment, not
+# from this file.
 
-polygon_rpc_url: "https://polygon-rpc.com"
+# Which Polymarket crypto market to follow.
+symbol: btc          # btc | eth | sol | xrp
+window: 5m           # 5m | 15m | 1h
 
-# Wallet
-private_key: "0xREPLACE_ME"        # signer EOA private key
-safe_address: "0xREPLACE_ME"       # Polymarket Safe (omit if using EOA-only mode)
+# Trading window inside each cycle (the bot only acts in this window).
+min_minutes_in_cycle: 2.0   # don't act in the first N minutes (book stabilizing)
+max_minutes_remaining: 4.0  # don't act if more than N minutes left (no time for the thesis to play out)
+exit_buffer_s: 10.0         # stop observing N seconds before the block ends
 
-# Redeem loop
-redeem_interval_s: 600             # check every 10 minutes
-log_level: "INFO"
+# Trivial decision rule: BUY the favorite when its bid crosses this threshold.
+# (In binary up/down markets the favorite's bid roughly tracks the implied
+# probability — but this is still a toy threshold, not an edge.)
+min_consensus: 0.85
 
-# Reserved for future versions of example_bot
-# stop_loss:
-#   enabled: false
-#   token_id: "0x..."
-#   trigger_price: 0.45
-#   size: 100
+# How often (seconds) to re-evaluate the trading rule inside a cycle.
+poll_interval_s: 5.0
+
+# Auto-redeem after each cycle. Requires POLYMARKET_PRIVATE_KEY in your
+# .env (see .env.example). If the key is unset, the bot runs in pure
+# observation mode (no chain transactions). The Polygon RPC URL also
+# comes from .env (POLYGON_RPC_URL); leave it blank there to fall back
+# to the built-in public Polygon endpoints.
+redeem_after_cycle: true
+
+# Logging.
+log_level: INFO              # DEBUG | INFO | WARNING | ERROR
