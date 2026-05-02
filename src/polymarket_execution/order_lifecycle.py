@@ -44,7 +44,8 @@ def retry_with_backoff(
     if policy is None:
         policy = RetryPolicy()
     raise NotImplementedError(
-        "v0.4.0: try/except loop, exponential backoff, classify retryability via is_retryable hook"
+        "retry_with_backoff is not implemented yet -- pending: try/except "
+        "loop, exponential backoff, classify retryability via is_retryable hook"
     )
 
 
@@ -71,8 +72,8 @@ class StaleOrderDetector:
     def list_stale(self, now_ts: float) -> list[StaleOrderSpec]:
         """Return tracked orders whose age exceeds their ``max_age_s``."""
         raise NotImplementedError(
-            "v0.4.0: filter _tracked by (now - placed_at) > max_age, "
-            "also verify still open via get_order"
+            "list_stale is not implemented yet -- pending: filter _tracked by "
+            "(now - placed_at) > max_age, also verify still open via get_order"
         )
 
 
@@ -88,5 +89,6 @@ def cancel_and_replace(
     so the caller can recover (the order is gone, but no new order is live).
     """
     raise NotImplementedError(
-        "v0.4.0: cancel via OrderPayload, await confirmation, then place new order"
+        "cancel_and_replace is not implemented yet -- pending: cancel via "
+        "OrderPayload, await confirmation, then place new order"
     )

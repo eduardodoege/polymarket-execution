@@ -22,8 +22,9 @@ def place_market_order(
     Raises ``OrderPlacementError`` on failure.
     """
     raise NotImplementedError(
-        "v0.4.0: read book top, build aggressive limit at best ± slippage, "
-        "call create_and_post_order with order_type=GTC or FOK"
+        "place_market_order is not implemented yet -- pending: read book top, "
+        "build aggressive limit at best ± slippage, call create_and_post_order "
+        "with order_type=GTC or FOK"
     )
 
 
@@ -38,5 +39,6 @@ def place_limit_order(
 ) -> Any:
     """Place a limit order at the specified price."""
     raise NotImplementedError(
-        "v0.4.0: build OrderArgs(token_id, price, size, side), call create_and_post_order"
+        "place_limit_order is not implemented yet -- pending: build "
+        "OrderArgs(token_id, price, size, side), call create_and_post_order"
     )

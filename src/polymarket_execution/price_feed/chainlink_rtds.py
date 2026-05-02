@@ -26,7 +26,7 @@ Workaround:
 This module currently implements the historical one-shot path (used by
 ``polymarket_execution.markets.crypto`` for PTB resolution) and the
 single-tick current-price one-shot. Streaming (``connect`` / ``listen`` /
-``subscribe`` / ``last_price``) lands with triggers/stop_loss in v0.3.
+``subscribe`` / ``last_price``) is not implemented yet -- pending the triggers module.
 """
 
 from __future__ import annotations
@@ -175,22 +175,28 @@ class ChainLinkRTDSFeed(PriceFeed):
             symbol, target_ts, tolerance_s=tolerance_s, url=self.url
         )
 
-    # The streaming methods land with triggers/stop_loss in v0.3.
+    # The streaming methods are not implemented yet -- pending the triggers module.
 
     async def connect(self) -> None:
         raise NotImplementedError(
-            "v0.3.0: streaming connect lands with triggers/stop_loss; "
-            "use the fetch_* one-shot classmethods for v0.2 use cases."
+            "streaming connect is not implemented yet -- pending the triggers "
+            "module. Use the fetch_* one-shot classmethods for current use cases."
         )
 
     async def disconnect(self) -> None:
-        raise NotImplementedError("v0.3.0: streaming disconnect lands with triggers/stop_loss.")
+        raise NotImplementedError(
+            "streaming disconnect is not implemented yet -- pending the triggers module."
+        )
 
     def subscribe(self, symbol: str) -> AsyncIterator[float]:
-        raise NotImplementedError("v0.3.0: streaming subscribe lands with triggers/stop_loss.")
+        raise NotImplementedError(
+            "streaming subscribe is not implemented yet -- pending the triggers module."
+        )
 
     async def last_price(self, symbol: str) -> float | None:
-        raise NotImplementedError("v0.3.0: streaming last_price lands with triggers/stop_loss.")
+        raise NotImplementedError(
+            "streaming last_price is not implemented yet -- pending the triggers module."
+        )
 
 
 # --- Internal helpers (kept module-private) ---

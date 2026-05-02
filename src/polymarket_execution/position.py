@@ -66,16 +66,21 @@ class PositionReconciler:
 
     def get_clob_positions(self) -> list[PositionRecord]:
         """Fetch positions as CLOB sees them."""
-        raise NotImplementedError("v0.2.0: call client.get_positions(), map to PositionRecord")
+        raise NotImplementedError(
+            "get_clob_positions is not implemented yet -- pending: call "
+            "client.get_positions(), map to PositionRecord"
+        )
 
     def get_chain_positions(self, token_ids: list[str]) -> list[PositionRecord]:
         """Fetch on-chain ERC-1155 balances for the listed token ids."""
         raise NotImplementedError(
-            "v0.2.0: web3.eth.contract(ConditionalTokens).balanceOfBatch(...)"
+            "get_chain_positions is not implemented yet -- pending: "
+            "web3.eth.contract(ConditionalTokens).balanceOfBatch(...)"
         )
 
     def reconcile(self) -> PositionDrift:
         """Compare CLOB and chain views, return a ``PositionDrift`` report."""
         raise NotImplementedError(
-            "v0.2.0: union token_ids, fetch both, diff with tolerance, build PositionDrift"
+            "reconcile is not implemented yet -- pending: union token_ids, "
+            "fetch both, diff with tolerance, build PositionDrift"
         )

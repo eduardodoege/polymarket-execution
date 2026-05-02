@@ -2,8 +2,8 @@
 
 Currently exposes the public **market** WebSocket — book updates for one
 or more conditional-token IDs. The private **user** WebSocket (auth'd
-order/fill events) lands together with the orders/lifecycle modules in
-v0.4.
+order/fill events) is not implemented yet; it will land together with
+the orders/lifecycle modules.
 
 Endpoint: ``wss://ws-subscriptions-clob.polymarket.com/ws/market`` (no auth)
 """

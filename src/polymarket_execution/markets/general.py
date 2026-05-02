@@ -1,8 +1,8 @@
 """General market discovery — listing, search, category filtering.
 
 For arbitrary Polymarket markets (politics, sports, entertainment, etc.).
-Delegates to ``polymarket-apis`` (a core dependency since v0.2) for
-paginated listing and filtering.
+Delegates to ``polymarket-apis`` (a core dependency) for paginated
+listing and filtering.
 
 For deterministic crypto up/down market lookup (BTC/ETH/SOL/XRP at
 5m/15m/1h windows), use ``polymarket_execution.markets.crypto`` instead —
@@ -35,8 +35,8 @@ def list_markets(
 ) -> list[MarketSummary]:
     """List markets matching the filters. Delegates to ``polymarket-apis``."""
     raise NotImplementedError(
-        "v0.5.0: import polymarket_apis, call its market listing endpoint, "
-        "map results to MarketSummary"
+        "list_markets is not implemented yet -- pending: import polymarket_apis, "
+        "call its market listing endpoint, map results to MarketSummary"
     )
 
 
@@ -46,10 +46,13 @@ def find_resolved_markets_for_holder(wallet_address: str) -> list[MarketSummary]
     Used internally by ``redeem.RedeemClient.discover_redeemable``.
     """
     raise NotImplementedError(
-        "v0.1.0: query positions endpoint filtered by holder + market.resolved=True"
+        "find_resolved_markets_for_holder is not implemented yet -- pending: "
+        "query positions endpoint filtered by holder + market.resolved=True"
     )
 
 
 def get_market(condition_id: str) -> MarketSummary:
     """Fetch full metadata for a single market by ``condition_id``."""
-    raise NotImplementedError("v0.5.0: call polymarket-apis market-by-id endpoint")
+    raise NotImplementedError(
+        "get_market is not implemented yet -- pending: call polymarket-apis market-by-id endpoint"
+    )

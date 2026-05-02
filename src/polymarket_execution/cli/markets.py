@@ -1,8 +1,8 @@
 """CLI: discover Polymarket markets.
 
 Currently exposes only `crypto` (slug-based crypto up/down market
-lookup). General listing/search via `polymarket-apis` is planned for
-v0.5 and will land here together with its implementation.
+lookup). General listing/search via `polymarket-apis` is not implemented
+yet; it will land here together with its implementation.
 """
 
 from __future__ import annotations

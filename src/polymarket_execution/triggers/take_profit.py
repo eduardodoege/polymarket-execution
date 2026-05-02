@@ -79,5 +79,6 @@ class TakeProfitMonitor(TriggerMonitor):
 
     async def _dispatch_exit(self, spec: TriggerSpec) -> None:
         raise NotImplementedError(
-            "v0.3.0: place market exit via orders.place, wrapped with recovery layers"
+            "take-profit exit dispatch is not implemented yet -- pending: place "
+            "market exit via orders.place, wrapped with recovery layers"
         )

@@ -325,14 +325,14 @@ async def test_instance_fetch_at_time_delegates_to_classmethod() -> None:
 @pytest.mark.asyncio
 async def test_streaming_methods_raise_not_implemented() -> None:
     feed = ChainLinkRTDSFeed()
-    with pytest.raises(NotImplementedError, match="v0.3.0"):
+    with pytest.raises(NotImplementedError, match="not implemented"):
         await feed.connect()
-    with pytest.raises(NotImplementedError, match="v0.3.0"):
+    with pytest.raises(NotImplementedError, match="not implemented"):
         await feed.disconnect()
-    with pytest.raises(NotImplementedError, match="v0.3.0"):
+    with pytest.raises(NotImplementedError, match="not implemented"):
         sub = feed.subscribe("btc")
         assert isinstance(sub, AsyncIterator)  # unreachable
-    with pytest.raises(NotImplementedError, match="v0.3.0"):
+    with pytest.raises(NotImplementedError, match="not implemented"):
         await feed.last_price("btc")
 
 

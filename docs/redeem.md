@@ -76,8 +76,8 @@ fallback chain).
 
 ```bash
 polymarket-execution redeem auto              # discover + redeem + wrap
-polymarket-execution redeem list --wallet 0x  # dry-run discovery (still placeholder in v0.1)
-polymarket-execution redeem market 0xCID...   # redeem one market (still placeholder in v0.1)
+polymarket-execution redeem list --wallet 0x  # dry-run discovery (placeholder, not implemented yet)
+polymarket-execution redeem market 0xCID...   # redeem one market (placeholder, not implemented yet)
 ```
 
 ## Errors
