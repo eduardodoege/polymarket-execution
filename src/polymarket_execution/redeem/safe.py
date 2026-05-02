@@ -40,8 +40,13 @@ class SafeRedeemAdapter:
 
     def is_owner(self) -> bool:
         """Check whether the configured EOA is an owner of the Safe."""
-        raise NotImplementedError("v0.2.0+: query Safe.getOwners() and check membership")
+        raise NotImplementedError(
+            "is_owner is not implemented yet -- pending: query Safe.getOwners() "
+            "and check membership"
+        )
 
     def threshold(self) -> int:
         """Return the Safe's signature threshold (1 for single-owner Safes)."""
-        raise NotImplementedError("v0.2.0+: query Safe.getThreshold()")
+        raise NotImplementedError(
+            "threshold is not implemented yet -- pending: query Safe.getThreshold()"
+        )

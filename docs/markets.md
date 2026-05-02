@@ -3,7 +3,7 @@
 Two modules cover different needs:
 
 - **`markets.crypto`** — native discovery for Polymarket crypto up/down markets (BTC/ETH/SOL/XRP at 5m/15m/1h windows). One HTTP call per lookup against the Gamma API.
-- **`markets.general`** — paginated listing, search, and category filtering for arbitrary markets (politics, sports, etc.). Delegates to `polymarket-apis` (a core dependency since v0.2).
+- **`markets.general`** — paginated listing, search, and category filtering for arbitrary markets (politics, sports, etc.). Delegates to `polymarket-apis` (a core dependency).
 
 For deterministic crypto lookup, use `crypto`. For everything else, use `general`.
 
@@ -76,7 +76,7 @@ from polymarket_execution.markets.general import list_markets
 active = list_markets(active=True, limit=100)
 ```
 
-Status: skeleton in v0.1, full implementation in v0.5.0.
+Status: skeleton; full implementation pending.
 
 ## CLI
 

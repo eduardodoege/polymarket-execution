@@ -54,7 +54,10 @@ class TriggerMonitor(ABC):
 
     async def run(self) -> None:
         """Run the monitor loop. Cancel via ``stop()`` or task cancellation."""
-        raise NotImplementedError("v0.3.0: poll loop, evaluate predicates, dispatch exits")
+        raise NotImplementedError(
+            "TriggerMonitor.run is not implemented yet -- pending: poll loop, "
+            "evaluate predicates, dispatch exits"
+        )
 
     def stop(self) -> None:
         """Signal the monitor loop to exit on its next iteration."""

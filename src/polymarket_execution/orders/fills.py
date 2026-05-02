@@ -40,6 +40,7 @@ def get_order_avg_fill_price(
     retry once or twice with a short delay before falling back to the limit price).
     """
     raise NotImplementedError(
-        "v0.2.0: call client.get_trades(TradeParams(id=order_id)), "
-        "return None if empty (lag), else compute sum(price*size) / sum(size)"
+        "get_order_avg_fill_price is not implemented yet -- pending: call "
+        "client.get_trades(TradeParams(id=order_id)), return None if empty "
+        "(lag), else compute sum(price*size) / sum(size)"
     )

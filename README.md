@@ -56,7 +56,7 @@ WebSocket lookup if you don't need the strike (faster, no extra socket).
 
 ## Quick start: redeem resolved positions
 
-> Available now (v0.1).
+> Available now.
 
 ```python
 from polymarket_execution.redeem import RedeemClient
@@ -73,7 +73,7 @@ print(result.redeemed_markets, result.wrap_tx_hash)
 
 ## Quick start: stop-loss
 
-> Preview API. Implementation lands in v0.3.0; the snippet below shows the target shape.
+> Preview API. Not implemented yet — the snippet below shows the target shape.
 
 ```python
 from polymarket_execution.triggers import StopLossMonitor
@@ -98,7 +98,7 @@ await monitor.run()
 | `markets.crypto` | Native slug-based discovery for crypto up/down markets |
 | `markets.general` | List/search arbitrary markets via polymarket-apis |
 | `order_lifecycle` | Retry, replace, and clean up stale orders |
-| `price_feed.chainlink_rtds` | Polymarket-aligned ChainLink price feed via WebSocket (one-shot snapshot lookup available now; streaming lands with `triggers` in v0.3) |
+| `price_feed.chainlink_rtds` | Polymarket-aligned ChainLink price feed via WebSocket (one-shot snapshot lookup available now; streaming pending the `triggers` module) |
 | `clob_ws.orderbook` | Real-time orderbook subscription via the CLOB v2 market WebSocket (auto-reconnect, async-iterator API) |
 
 ## CLI

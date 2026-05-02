@@ -107,8 +107,9 @@ def recover_from_balance_lock(
 ) -> RecoveryResult:
     """Layer 3 — balance lock error from a follow-up tier suggests prior fill."""
     raise NotImplementedError(
-        "v0.4.0: if balance dropped >= try_qty * fill_ratio, "
-        "and get_order_status(last_order_id).size_matched > 0, recover"
+        "recover_from_balance_lock is not implemented yet -- pending: if "
+        "balance dropped >= try_qty * fill_ratio, and "
+        "get_order_status(last_order_id).size_matched > 0, recover"
     )
 
 
@@ -157,8 +158,9 @@ def recover_from_suspect_drop(
 ) -> RecoveryResult:
     """Layer 5 — catch-all when balance dropped but no other layer fired."""
     raise NotImplementedError(
-        "v0.4.0: if last_order_id present, get_order_status, "
-        "if size_matched >= original_qty * fill_ratio, recover (caller reconstitutes PnL)"
+        "recover_from_suspect_drop is not implemented yet -- pending: if "
+        "last_order_id present, get_order_status, if size_matched >= "
+        "original_qty * fill_ratio, recover (caller reconstitutes PnL)"
     )
 
 

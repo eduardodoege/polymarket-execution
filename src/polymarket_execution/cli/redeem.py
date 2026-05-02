@@ -18,7 +18,10 @@ def auto(
     dry_run: bool = typer.Option(False, help="Discover but don't submit transactions."),
 ) -> None:
     """Discover all resolved positions, redeem them, then wrap USDC.e -> pUSD."""
-    raise NotImplementedError("v0.1.0: build RedeemClient, call auto_redeem_all, print summary")
+    raise NotImplementedError(
+        "redeem auto CLI is not implemented yet -- pending: build RedeemClient, "
+        "call auto_redeem_all, print summary"
+    )
 
 
 @app.command("list")
@@ -28,7 +31,8 @@ def list_redeemable(
 ) -> None:
     """List markets where ``wallet`` has redeemable shares (no transactions sent)."""
     raise NotImplementedError(
-        "v0.1.0: call discover_redeemable, print table of (condition_id, shares, amount)"
+        "redeem list CLI is not implemented yet -- pending: call "
+        "discover_redeemable, print table of (condition_id, shares, amount)"
     )
 
 
@@ -39,4 +43,7 @@ def market(
     safe_address: str | None = typer.Option(None, envvar="POLYMARKET_SAFE"),
 ) -> None:
     """Redeem one specific market by condition_id."""
-    raise NotImplementedError("v0.1.0: build RedeemClient, call redeem_market, print TX hash")
+    raise NotImplementedError(
+        "redeem market CLI is not implemented yet -- pending: build "
+        "RedeemClient, call redeem_market, print TX hash"
+    )

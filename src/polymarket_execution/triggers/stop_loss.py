@@ -55,5 +55,6 @@ class StopLossMonitor(TriggerMonitor):
 
     async def _dispatch_exit(self, spec: TriggerSpec) -> None:
         raise NotImplementedError(
-            "v0.3.0: place market exit via orders.place, with recovery layers wrapping the call"
+            "stop-loss exit dispatch is not implemented yet -- pending: place "
+            "market exit via orders.place, with recovery layers wrapping the call"
         )
