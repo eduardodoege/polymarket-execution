@@ -99,6 +99,7 @@ await monitor.run()
 | `markets.general` | List/search arbitrary markets via polymarket-apis |
 | `order_lifecycle` | Retry, replace, and clean up stale orders |
 | `price_feed.chainlink_rtds` | Polymarket-aligned ChainLink price feed via WebSocket (one-shot snapshot lookup available now; streaming lands with `triggers` in v0.3) |
+| `clob_ws.orderbook` | Real-time orderbook subscription via the CLOB v2 market WebSocket (auto-reconnect, async-iterator API) |
 
 ## CLI
 
