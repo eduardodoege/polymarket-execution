@@ -105,6 +105,7 @@ await monitor.run()
 
 ```bash
 polymarket-execution redeem auto                          # redeem all resolved positions
+polymarket-execution redeem auto --dry-run                # discover only, no transactions
 polymarket-execution markets crypto --window 5m           # current crypto markets
 polymarket-execution markets crypto --symbol btc          # single symbol
 polymarket-execution markets crypto --window 5m --no-ptb  # skip ChainLink PTB lookup (faster)
