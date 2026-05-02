@@ -27,9 +27,10 @@ expect the unexpected.
 3. Inside a configurable trading window
    (`min_minutes_in_cycle` / `max_minutes_remaining`), logs a
    hypothetical `WOULD BUY` decision when criteria match.
-4. **Order placement lands in v0.4** — until then the bot is
-   observation-only and never sends orders. The `WOULD BUY` log line
-   shows what a real execution path would have done.
+4. **Order placement is not implemented yet** — until the orders module
+   ships the bot is observation-only and never sends orders. The
+   `WOULD BUY` log line shows what a real execution path would have
+   done.
 5. After the block ends, sweeps redeemable positions via `redeem` so
    winnings from previous cycles become spendable pUSD.
 6. Sleeps to the next block boundary and repeats.
@@ -63,14 +64,18 @@ The bot loads `.env` automatically when it sits next to your
 > use that EOA's private key here. Never use a wallet that holds
 > meaningful funds.
 
-## Capability map by `polymarket-execution` version
+## Capabilities today
 
-| Library version | example_bot capability |
-|---|---|
-| **v0.2 (current)** | Discovery + ChainLink PTB + orderbook stream + auto-redeem (observation only — `WOULD BUY` log lines, no orders sent) |
-| v0.3 | + stop-loss / take-profit on open positions |
-| v0.4 | + order placement (bot becomes live, no longer observation-only) + masked-fill recovery |
-| v0.5 | + position reconciliation across CLOB and chain |
+- Market discovery (`markets.crypto`) with ChainLink-resolved strike
+- Real-time orderbook subscription (`clob_ws.OrderBookStream`)
+- Per-cycle "WOULD BUY" decision logging — observation only
+- Post-cycle auto-redeem sweep (`redeem.RedeemClient`)
+
+The bot is intentionally additive: as new modules ship in the library
+(stop-loss, take-profit, order placement, masked-fill recovery,
+position reconciliation, ...), they will plug into the same skeleton
+and the bot grows alongside the library — without changing the shape
+of `bot.py`.
 
 ## What this bot does NOT include
 

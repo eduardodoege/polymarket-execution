@@ -21,14 +21,15 @@ What the bot does each cycle:
 2. Subscribe to the YES/NO orderbooks via ``clob_ws.OrderBookStream``.
 3. Inside the trading window, log a hypothetical ``WOULD BUY`` decision
    when consensus crosses ``min_consensus``.
-4. **Order placement lands in v0.4.** Until then the bot is
-   observation-only and never sends orders. The ``WOULD BUY`` log line
-   shows what a real execution path would have done.
+4. **Order placement is not implemented yet.** Until the orders module
+   ships the bot is observation-only and never sends orders. The
+   ``WOULD BUY`` log line shows what a real execution path would have
+   done.
 5. After the block ends, sweep redeemable positions (``redeem``) so any
    winnings from prior cycles become spendable pUSD.
 6. Sleep to the next block boundary and repeat.
 
-See ``README.md`` for setup and the per-version capability map.
+See ``README.md`` for setup.
 """
 
 from __future__ import annotations
@@ -109,7 +110,7 @@ class CryptoDemoBot:
 
     async def run(self) -> None:
         log.warning("=" * 70)
-        log.warning("DEMO BOT — observation only, no orders sent (v0.4 lands orders).")
+        log.warning("DEMO BOT — observation only; the orders module is not implemented yet.")
         log.warning("Strategy is trivial. This will lose money in production.")
         log.warning("=" * 70)
 
@@ -165,7 +166,7 @@ class CryptoDemoBot:
                 if not decision_logged and self._can_trade(market):
                     decision = self._decide(market, stream)
                     if decision is not None:
-                        log.info("WOULD %s — observation only (orders land in v0.4)", decision)
+                        log.info("WOULD %s — observation only (no orders sent)", decision)
                         decision_logged = True
                 with contextlib.suppress(TimeoutError):
                     await asyncio.wait_for(
