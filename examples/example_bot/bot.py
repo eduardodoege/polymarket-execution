@@ -56,7 +56,11 @@ log = logging.getLogger("example_bot")
 
 @dataclass
 class BotConfig:
-    """Configuration loaded from YAML. See ``config.example.yaml``."""
+    """Configuration loaded from YAML. See ``config.example.yaml``.
+
+    Secrets (private keys, RPC URLs with embedded API keys) live in
+    ``.env`` — see ``.env.example`` — not in this YAML.
+    """
 
     symbol: str = "btc"
     window: str = "5m"
@@ -66,7 +70,6 @@ class BotConfig:
     poll_interval_s: float = 5.0
     exit_buffer_s: float = 10.0
     redeem_after_cycle: bool = True
-    rpc_url: str | None = None
     log_level: str = "INFO"
 
     @classmethod
@@ -204,9 +207,11 @@ class CryptoDemoBot:
         private_key = self._private_key
         assert private_key is not None  # guarded in run()
 
+        rpc_url = os.environ.get("POLYGON_RPC_URL") or None
+
         def _do_sweep() -> None:
             with RedeemClient(
-                private_key=private_key, rpc_url=self.config.rpc_url, signature_type=2
+                private_key=private_key, rpc_url=rpc_url, signature_type=2
             ) as redeemer:
                 result = redeemer.auto_redeem_all()
             if result.redeemed_markets:
@@ -243,7 +248,25 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def _try_load_dotenv(config_path: Path) -> None:
+    """Best-effort load of `.env` next to the config (or in CWD).
+
+    No-op if `python-dotenv` is not installed — the user can still
+    `export` env vars manually.
+    """
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        return
+    candidate = config_path.parent / ".env"
+    if candidate.is_file():
+        load_dotenv(candidate)
+    else:
+        load_dotenv()  # falls back to CWD
+
+
 async def _run_main(config_path: Path) -> int:
+    _try_load_dotenv(config_path)
     config = BotConfig.load(config_path)
     config.validate()
     logging.basicConfig(

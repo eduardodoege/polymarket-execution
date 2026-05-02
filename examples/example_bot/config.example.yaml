@@ -20,10 +20,12 @@ min_consensus: 0.85
 # How often (seconds) to re-evaluate the trading rule inside a cycle.
 poll_interval_s: 5.0
 
-# Auto-redeem after each cycle. Requires POLYMARKET_PRIVATE_KEY in your env.
-# If unset, the bot runs in pure observation mode (no chain transactions).
+# Auto-redeem after each cycle. Requires POLYMARKET_PRIVATE_KEY in your
+# .env (see .env.example). If the key is unset, the bot runs in pure
+# observation mode (no chain transactions). The Polygon RPC URL also
+# comes from .env (POLYGON_RPC_URL); leave it blank there to fall back
+# to the built-in public Polygon endpoints.
 redeem_after_cycle: true
-rpc_url: null                # null/omit -> built-in fallback to public Polygon RPCs
 
 # Logging.
 log_level: INFO              # DEBUG | INFO | WARNING | ERROR

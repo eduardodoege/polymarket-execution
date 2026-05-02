@@ -41,17 +41,27 @@ expect the unexpected.
 pip install -e .
 pip install -r examples/example_bot/requirements.txt
 
+# 1) Tuning (non-secret) -- edit to taste.
 cp examples/example_bot/config.example.yaml examples/example_bot/config.yaml
-# Edit config.yaml to taste.
 
-# Optional: set this for the auto-redeem step. Without it the bot runs
-# in pure observation mode (no chain transactions at all).
-export POLYMARKET_PRIVATE_KEY=0xYOUR_EOA_KEY
+# 2) Secrets -- private key, optional RPC URL with API key, etc.
+#    .env is gitignored; .env.example is the safe template.
+cp examples/example_bot/.env.example examples/example_bot/.env
+# Edit .env: set POLYMARKET_PRIVATE_KEY for the EOA that signs the
+# redeem transactions. Leave it blank to run in pure observation mode
+# (no chain transactions at all).
 
 python examples/example_bot/bot.py --config examples/example_bot/config.yaml
 ```
 
-Ctrl-C to stop.
+The bot loads `.env` automatically when it sits next to your
+`config.yaml` (via `python-dotenv`). Ctrl-C to stop.
+
+> **Use a dedicated wallet for first runs.** Create a fresh MetaMask
+> account, fund it with $5-10 + a tiny bit of POL for gas, complete
+> Polymarket onboarding once in the UI so the Safe is created, then
+> use that EOA's private key here. Never use a wallet that holds
+> meaningful funds.
 
 ## Capability map by `polymarket-execution` version
 
