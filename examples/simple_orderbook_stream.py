@@ -1,22 +1,31 @@
 """Example: subscribe to one or more orderbooks and print every update.
 
-Subscribes to the comma-separated ``ORDERBOOK_TOKEN_IDS`` env var (or a
-default pair) on the public Polymarket CLOB v2 market WebSocket and
-prints each ``OrderBook`` snapshot as it arrives. Auto-reconnects on
-network hiccups. Runs until Ctrl-C.
+Subscribes to the conditional-token IDs given as positional arguments on
+the public Polymarket CLOB v2 market WebSocket and prints each
+``OrderBook`` snapshot as it arrives. Auto-reconnects on network
+hiccups. Runs until Ctrl-C.
 
 Usage::
 
-    ORDERBOOK_TOKEN_IDS=0xtoken_yes,0xtoken_no \\
-    python examples/simple_orderbook_stream.py
+    python examples/simple_orderbook_stream.py <yes_token_id> [<no_token_id> ...]
+
+Discover the current crypto token IDs with::
+
+    polymarket-execution markets crypto --window 5m --show-tokens
+
+Or, in one shot (jq required)::
+
+    TOKEN=$(polymarket-execution markets crypto --symbol btc --window 5m --json \\
+        | jq -r '.[0].yes_token_id')
+    python examples/simple_orderbook_stream.py "$TOKEN"
 """
 
 from __future__ import annotations
 
+import argparse
 import asyncio
 import contextlib
 import logging
-import os
 import signal
 import sys
 from types import FrameType
@@ -57,15 +66,21 @@ def main() -> int:
         level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s | %(message)s"
     )
 
-    raw = os.environ.get("ORDERBOOK_TOKEN_IDS", "").strip()
-    if not raw:
-        log.error(
-            "set ORDERBOOK_TOKEN_IDS=<comma-separated token ids> — see "
-            "examples/simple_markets_crypto.py for how to discover token ids "
-            "via markets.crypto"
+    parser = argparse.ArgumentParser(
+        description=(
+            "Subscribe to Polymarket CLOB v2 orderbooks and print every update. "
+            "Discover token IDs via `polymarket-execution markets crypto -t`."
         )
-        return 2
-    token_ids = [t.strip() for t in raw.split(",") if t.strip()]
+    )
+    parser.add_argument(
+        "token_ids",
+        nargs="+",
+        metavar="TOKEN_ID",
+        help="One or more conditional-token IDs (YES or NO) to subscribe to.",
+    )
+    args = parser.parse_args()
+    token_ids: list[str] = args.token_ids
+
     log.info("orderbook stream starting; subscribing to %d token(s)", len(token_ids))
 
     loop = asyncio.new_event_loop()
