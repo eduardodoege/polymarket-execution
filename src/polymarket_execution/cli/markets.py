@@ -7,6 +7,10 @@ v0.5 and will land here together with its implementation.
 
 from __future__ import annotations
 
+import json
+from dataclasses import asdict
+from typing import Any
+
 import typer
 
 from polymarket_execution.markets.crypto import (
@@ -42,6 +46,17 @@ def crypto(
             "Faster (no WebSocket), but the PTB column will be empty."
         ),
     ),
+    show_tokens: bool = typer.Option(
+        False,
+        "--show-tokens",
+        "-t",
+        help="Print the full YES/NO conditional-token IDs below the table.",
+    ),
+    as_json: bool = typer.Option(
+        False,
+        "--json",
+        help="Emit machine-readable JSON instead of the human-readable table.",
+    ),
 ) -> None:
     """Discover the current block's crypto up/down markets."""
     if window not in BLOCK_DURATIONS_S:
@@ -58,14 +73,22 @@ def crypto(
                 f"No market found for {symbol.upper()} {window} (current block not yet listed)"
             )
             raise typer.Exit(code=1)
-        _print_market_table([market])
+        markets = [market]
+    else:
+        markets = discover_current_markets(window=window, resolve_ptb=resolve_ptb)
+        if not markets:
+            typer.echo(
+                f"No markets listed yet for window {window} (symbols tried: {DEFAULT_SYMBOLS})"
+            )
+            raise typer.Exit(code=1)
+
+    if as_json:
+        _print_markets_json(markets)
         return
 
-    markets = discover_current_markets(window=window, resolve_ptb=resolve_ptb)
-    if not markets:
-        typer.echo(f"No markets listed yet for window {window} (symbols tried: {DEFAULT_SYMBOLS})")
-        raise typer.Exit(code=1)
     _print_market_table(markets)
+    if show_tokens:
+        _print_token_ids(markets)
 
 
 def _print_market_table(markets: list[CryptoMarket]) -> None:
@@ -78,3 +101,28 @@ def _print_market_table(markets: list[CryptoMarket]) -> None:
             f"{m.symbol.upper():<6} {m.window:<4} {m.yes_price:>5.2f} {m.no_price:>5.2f} "
             f"{m.minutes_remaining:>5.1f}min  {ptb}"
         )
+
+
+def _print_token_ids(markets: list[CryptoMarket]) -> None:
+    """Print the full YES/NO conditional-token IDs below the table."""
+    typer.echo("")
+    typer.echo("Token IDs:")
+    for m in markets:
+        sym = m.symbol.upper()
+        typer.echo(f"  {sym:<3} YES  {m.yes_token_id}")
+        typer.echo(f"  {sym:<3} NO   {m.no_token_id}")
+
+
+def _print_markets_json(markets: list[CryptoMarket]) -> None:
+    """Emit the discovered markets as a JSON array (parseable by jq)."""
+    payload = [_market_to_dict(m) for m in markets]
+    typer.echo(json.dumps(payload, indent=2))
+
+
+def _market_to_dict(m: CryptoMarket) -> dict[str, Any]:
+    """Serialize a CryptoMarket including derived properties."""
+    out: dict[str, Any] = asdict(m)
+    out["time_remaining_s"] = m.time_remaining_s
+    out["minutes_remaining"] = m.minutes_remaining
+    out["polymarket_url"] = m.polymarket_url
+    return out

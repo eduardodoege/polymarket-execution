@@ -108,6 +108,8 @@ polymarket-execution redeem auto                          # redeem all resolved 
 polymarket-execution markets crypto --window 5m           # current crypto markets
 polymarket-execution markets crypto --symbol btc          # single symbol
 polymarket-execution markets crypto --window 5m --no-ptb  # skip ChainLink PTB lookup (faster)
+polymarket-execution markets crypto --window 5m -t        # also print full YES/NO token IDs
+polymarket-execution markets crypto --window 5m --json    # machine-readable JSON (jq-friendly)
 ```
 
 New CLI commands ship together with the feature they expose — we don't
